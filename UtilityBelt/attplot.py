@@ -1,4 +1,4 @@
-from functions import get_swift_attitude
+from .functions import get_swift_attitude
 
 from swifttools.swift_too import Clock
 import matplotlib.pyplot as plt
@@ -13,7 +13,7 @@ def attitude_plot(trigid, trigtime, outdir='', duration=300):
     fig = plt.figure(figsize=(5, 5), dpi=125)
 
     att_data, utcf = get_swift_attitude(trigtime)
-    trigger_time= Clock(utctime=trigtime).met
+    trigger_time = Clock(utctime=trigtime).met
     att_ind = np.argmin(np.abs(att_data['TIME'] - trigger_time))
     pnt_ra, pnt_dec = att_data['POINTING'][att_ind,:2]
 
@@ -37,19 +37,18 @@ def attitude_plot(trigid, trigtime, outdir='', duration=300):
 def plotly_attitude(trigid, trigtime, outdir='', duration=100):
 
     satdata, utcf = get_swift_attitude(trigtime)
-    trigger_time= Clock(utctime=trigtime).met
+    trigger_time = Clock(utctime=trigtime).met
 
-    att_data=satdata[(satdata['TIME']-trigger_time < duration) & (satdata['TIME']-trigger_time > -duration)]
+    att_data = satdata[(satdata['TIME']-trigger_time < duration) & (satdata['TIME']-trigger_time > -duration)]
 
-    att_ind = np.argmin(np.abs(att_data['TIME'] - trigger_time))
-
-    angles=['RA','Dec','Roll']
-    ind=0
-    traces=[]
+    angles=['RA', 'Dec', 'Roll']
+    ind = 0
+    traces = []
     for angle in angles:
         trace1 = go.Scatter(x=att_data['TIME']-trigger_time,
                             y=att_data['POINTING'][:, ind],
-                            name=angle,mode='markers',
+                            name=angle,
+                            mode='markers',
                             marker_symbol='circle')
         ind += 1
         traces.append(trace1)

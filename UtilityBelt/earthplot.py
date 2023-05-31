@@ -9,7 +9,7 @@ from matplotlib.colors import to_rgba
 from matplotlib.offsetbox import AnnotationBbox, OffsetImage
 from matplotlib.patches import Polygon
 
-from functions import get_swift_orbit
+from .functions import get_swift_orbit
 from swifttools.swift_too import Clock
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

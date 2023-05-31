@@ -1,5 +1,5 @@
-from functions import get_64ms_rates, get_swift_attitude
-from functions import get_quad_rates
+from .functions import get_64ms_rates, get_swift_attitude
+from .functions import get_quad_rates
 
 
 from swifttools.swift_too import Clock
@@ -15,7 +15,7 @@ def plot_64ms(trigid, trigtime, outdir='', duration=100):
     fig = plt.figure(figsize=(5, 5), dpi=125)
 
     att_data, utcf = get_swift_attitude(trigtime)
-    trigger_time= Clock(utctime=trigtime).met
+    trigger_time = Clock(utctime=trigtime).met
     att_ind = np.argmin(np.abs(att_data['TIME'] - trigger_time))
     pnt_ra, pnt_dec = att_data['POINTING'][att_ind,:2]
 
@@ -38,14 +38,14 @@ def plot_64ms(trigid, trigtime, outdir='', duration=100):
 
 def plotly_64ms(trigtime, duration=100):
     ratedata, utcf = get_64ms_rates(trigtime)
-    trigger_time= Clock(utctime=trigtime).met
+    trigger_time = Clock(utctime=trigtime).met
 
-    ratedat=ratedata[(ratedata['TIME']-trigger_time < duration) & (ratedata['TIME']-trigger_time > -duration)]
+    ratedat = ratedata[(ratedata['TIME']-trigger_time < duration) & (ratedata['TIME']-trigger_time > -duration)]
 
     if len(ratedat) == 0:
         raise ValueError(f"No data in +- {duration} window.")
 
-    ebins=["15-25","25-50","50-100","100-350"]
+    ebins=["15-25", "25-50", "50-100", "100-350"]
     ind = 0
     traces=[]
     for ebin in ebins:
@@ -54,7 +54,7 @@ def plotly_64ms(trigtime, duration=100):
                             mode='lines',
                             line_shape='hv',
                             name=ebin)
-        ind+=1
+        ind += 1
         traces.append(trace1)
 
     trace1 = go.Scatter(x=ratedat['TIME']-trigger_time,
@@ -97,7 +97,7 @@ def plotly_quads(trigtime, duration=100):
                             mode='lines',
                             line_shape='hv',
                             name=ebin)
-        ind+=1
+        ind += 1
         traces.append(trace1)
 
     trace1 = go.Scatter(x=ratedat['TIME']-trigger_time,
@@ -120,8 +120,8 @@ def plotly_quads(trigtime, duration=100):
 
 
 def plotly_rates(trigid, trigtime, outdir=''):
-    data1 = io.to_json(plotly_64ms(trigid,trigtime))
-    data2 = io.to_json(plotly_quads(trigid,trigtime))
+    data1 = io.to_json(plotly_64ms(trigtime))
+    data2 = io.to_json(plotly_quads(trigtime))
     data = '['+data1+','+data2+']'  # stupid shit
     filename = os.path.join(outdir, f'{trigid}_LIGHTCURVE.json')
     with open(filename, 'w') as f:

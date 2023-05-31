@@ -6,7 +6,7 @@ from astropy import wcs
 from astropy.io import fits
 from scipy.spatial.transform import Rotation as R
 from scipy.spatial import ConvexHull
-from functions import get_swift_orbit
+from .functions import get_swift_orbit
 from swifttools.swift_too import ObsQuery, Clock, PlanQuery
 
 import matplotlib.pyplot as plt
