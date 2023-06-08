@@ -78,7 +78,7 @@ def display_hp_map(res_hpmax_tab, norm=None, vmin=None, vmax=None, ra=None, dec=
     hp.graticule()
 
 
-def plotly_dlogl_sky(trigid,res_out_tab,outdir=''):
+def plotly_dlogl_sky(trigid, res_out_tab, config_id=0, outdir=''):
     # find timeID with max TS
     maxTIMEid = res_out_tab['timeID'][res_out_tab['TS'].argmax()]
 
@@ -106,7 +106,7 @@ def plotly_dlogl_sky(trigid,res_out_tab,outdir=''):
                            "lat": "Dec (deg)",
                            "color": "&#916;LLH"
                        },
-                       title='&#916;LLH for OFOV Positions'
+                       title=f'&#916;LLH for OFOV Positions, Config {config_id}'
                     )
     fig.update_traces(
                     customdata=special,
@@ -130,14 +130,14 @@ def plotly_dlogl_sky(trigid,res_out_tab,outdir=''):
     ))
 
     data = fig
-    filename = os.path.join(outdir, f'{trigid}_n_OUTFOV.json')
+    filename = os.path.join(outdir, f'{trigid}_{config_id}_n_OUTFOV.json')
 
     with open(filename, 'w') as f:
         f.write(io.to_json(data))
     return filename
 
 
-def plotly_waterfall_seeds(rates, trigid, outdir=''):
+def plotly_waterfall_seeds(rates, trigid, config_id=0, outdir=''):
 
     magma_cmap = cm.get_cmap('magma')
     norm = matplotlib.colors.Normalize(0,max(rates.snr))
@@ -176,18 +176,18 @@ def plotly_waterfall_seeds(rates, trigid, outdir=''):
                                  hoverinfo='none'
                                 )
     fig1.update_layout(xaxis_title='T-T0 (s)', yaxis_title='Timescale (s)', 
-                       title='Full Rates SNR per Time Bin')
+                       title=f'Full Rates SNR per Time Bin, Config {config_id}')
     fig1['layout']['showlegend'] = False
     fig1.add_trace(colorbar_trace)
     data=fig1
-    filename = os.path.join(outdir, f'{trigid}_n_FULLRATE.json')
+    filename = os.path.join(outdir, f'{trigid}_{config_id}_n_FULLRATE.json')
 
     with open(filename, 'w') as f:
         f.write(io.to_json(data))
     return filename
 
 
-def plotly_splitrates(trigid, splitrates, outdir=''):
+def plotly_splitrates(trigid, splitrates, config_id=0, outdir=''):
     maxTIMEid = splitrates['timeID'].iloc[splitrates['TS'].argmax()]
     maxTIMEonly = splitrates.loc[splitrates['timeID']==maxTIMEid]
 
@@ -212,7 +212,7 @@ def plotly_splitrates(trigid, splitrates, outdir=''):
                             "y": "IMY",
                             "color": "&#x221A;&#916;&#923;"
                         },
-                        title = f"Split-Rate Results for Best Time Bin ({ifovonly.dur.iloc[0]}s at dt = {round(maxTIMEonly.dt.iloc[0],2)}))")
+                        title = f"Split-Rate Results for Best Time Bin ({ifovonly.dur.iloc[0]}s at dt = {round(maxTIMEonly.dt.iloc[0],2)})), Config {config_id}")
 
     special = np.empty(shape=(len(ifovonly), 3, 1), dtype='object')
     special[:, 0] = np.array(ifovonly.theta).reshape(-1, 1)
@@ -232,7 +232,7 @@ def plotly_splitrates(trigid, splitrates, outdir=''):
                     lataxis_showgrid=True,
                     lonaxis_showgrid=True)
     data = fig
-    filename = os.path.join(outdir, f'{trigid}_n_SPLITRATE.json')
+    filename = os.path.join(outdir, f'{trigid}_{config_id}_n_SPLITRATE.json')
 
     with open(filename, 'w') as f:
         f.write(io.to_json(data))
