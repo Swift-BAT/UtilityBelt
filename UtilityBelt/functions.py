@@ -216,8 +216,15 @@ def findtheigwnmap(trigname):
             skymapfile=open(filename,'wb')
             skymapfile.write(skymap)
             return filename
+        elif 'cwb.fits.gz' in response.json():
+            response=client.files(trigname,'cwb.fits.gz')
+            skymap=response.read()
+            filename='cwb.fits.gz'
+            skymapfile=open(filename,'wb')
+            skymapfile.write(skymap)
+            return filename
         else:
-            print('SKYMAP_READY flag set but no Bilby or bayestar map found.')
+            print('SKYMAP_READY flag set but no Bilby or bayestar or cwb map found.')
             return False
     else:
         print('Skymap not ready.')
