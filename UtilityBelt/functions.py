@@ -194,6 +194,9 @@ def findthehpxmap(trigtime):
 
 
 def findtheigwnmap(trigname):
+    if trigname.startswith("S") is False:
+        print("Not a superevent.")
+        return False
     client = GraceDb()
     try:
         response=client.superevent(trigname)
