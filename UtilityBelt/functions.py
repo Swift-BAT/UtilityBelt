@@ -236,7 +236,7 @@ def findtheigwnmap(trigname):
         return False
 
 
-def cont_lev(coord,skymap)):
+def cont_lev(coord,skymap):
 
     coords_list = coord[n][1:-1].split(',')
     c = [float(coord.strip()) for coord in coords_list]
@@ -262,7 +262,7 @@ def I_omega(c,skymap):
 
     match_ipix = ah.lonlat_to_healpix(ra, dec, max_nside, order='nested')
 
-    i = sorter[np.searchsorted(index, match_ipix, side='right', sorter=sorter)
+    i = sorter[np.searchsorted(index, match_ipix, side='right', sorter=sorter)]
             
     return 4 * np.pi * skymap[i]['PROBDENSITY'].to_value(u.rad**-2)
 
