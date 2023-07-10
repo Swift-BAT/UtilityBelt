@@ -90,6 +90,7 @@ def query_swift(trigtime, filename_suffix, **kwargs):
     d.obsid = obsid
     d.bat = True
     d.match = f"*{filename_suffix}"
+    d.uksdc = True
 
     if d.submit():
         if len(d.entries) == 1:
