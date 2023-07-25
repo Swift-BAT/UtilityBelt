@@ -319,7 +319,7 @@ def ul_gw(gwid,t0,head,ras,decs,wdir,path_results, ratio, ul_arr):
     
 
 
-def ul_nogw(t0,head,ras,decs,wdir, path_results, ratio, ul_arr):
+def ul_nogw(t0,head,ras,decs,wdir, path_results, ratio, ul_arr, coord_file):
 
     fermi=False
 
@@ -331,9 +331,9 @@ def ul_nogw(t0,head,ras,decs,wdir, path_results, ratio, ul_arr):
     region=None
 
 
-    if args.coord_file != None:
+    if coord_file != None:
 
-        filename = os.path.join(wdir,args.coord_file)
+        filename = os.path.join(wdir,coord_file)
 
         with open(filename, 'r') as file:
             # Read the first line to get the requested variable
