@@ -23,6 +23,10 @@ from scipy.spatial import Delaunay
 from gbm.finder import TriggerCatalog
 import os
 
+from datetime import datetime
+from astropy.time import Time
+
+
 def down(graceid,file_name,path):
 
     client = GraceDb()
@@ -585,4 +589,43 @@ def ul_nogw(t0,head,ras,decs,wdir, path_results, ratio, ul_arr, coord_file):
             df.to_csv(os.path.join(path_results,'ul.txt'), sep='\t', index=True)
 
             logging.info('ul done')
+
+def  compute_ul(trig_time,head,ras,decs,work_dir, path_results, ratio, ul_arr, coord_file):
+
+    logging.basicConfig(
+        filename=os.path.join(path_results,'upper_limits_analysis.log'),
+        level=logging.DEBUG,
+        format="%(asctime)s-" "%(levelname)s- %(message)s",
+    )
+
+
+    utc_time = Time(trig_time, scale='utc')
+    t1=utc_time.gps-1
+    t2=utc_time.gps+1
+
+    client = GraceDb()
+
+    ev=client.superevents(query='gpstime: %s .. %s' %(str(t1),str(t2)))
+
+    ev_list=[]
+    for event in ev:
+        ev_list.append(event['superevent_id'])
+
+    #logging.info('ev list', ev_list)
+
+
+    try:
+        trig_time = datetime.strptime(trig_time, '%Y-%m-%dT%H:%M:%S.%f').strftime('%Y-%m-%d %H:%M:%S.%f')
+    except ValueError:
+        trig_time = datetime.strptime(trig_time, '%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+
+    
+
+
+    if len(ev_list)>0:
+        ul_gw(ev_list[0],trig_time,head,ras,decs,work_dir, path_results, ratio, ul_arr)
+    else:
+        
+        ul_nogw(trig_time,head,ras,decs,work_dir, path_results, ratio, ul_arr, coord_file)
+
 
