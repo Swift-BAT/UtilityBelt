@@ -258,7 +258,7 @@ def make_earthplot(trigtime, trigid, orbitdat, prompt=True, outdir=''):
     # McIlwain L
     artist = mcilwain_map(lon_range, lat_range, ax, saa_poly, alpha=0.5)
     cb = plt.colorbar(artist, label='McIlwain L', ax=ax, shrink=0.6, pad=0.05, orientation='horizontal')
-    cb.draw_all()
+
 
     if prompt:
         title = f'Earthplot from TLE (provisional)'
